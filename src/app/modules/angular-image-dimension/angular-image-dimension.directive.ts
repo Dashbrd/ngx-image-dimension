@@ -5,7 +5,7 @@ import {
 
 @Directive({
   // tslint:disable-next-line:directive-selector
-  selector: '[ngxImageDimension]'
+  selector: '[ngxImageDimension],[ngx-image-dimension]'
 })
 export class AngularImageDimensionDirective implements OnChanges {
 
