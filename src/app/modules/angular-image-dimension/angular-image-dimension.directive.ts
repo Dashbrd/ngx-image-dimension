@@ -1,15 +1,29 @@
-import { Directive, ElementRef, Output, EventEmitter } from '@angular/core';
+import {
+  Directive, ElementRef, Output,
+  EventEmitter, OnChanges, SimpleChanges, Input
+} from '@angular/core';
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[ngxImageDimension]'
 })
-export class AngularImageDimensionDirective {
+export class AngularImageDimensionDirective implements OnChanges {
+
+  @Input()
+  public imageSource: string;
   @Output()
   public onImageLoaded = new EventEmitter<ImageDimensionArgs>();
   private imageElement: HTMLImageElement;
   constructor(private elementRef: ElementRef) {
     this.imageElement = elementRef.nativeElement;
-    this.imageElement.onload = () => this.onImageLoadComplete;
+    this.imageElement.onload = (event: Event) => this.onImageLoadComplete(this.imageElement, event);
+  };
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const imageSourceChange = changes['imageSource'];
+    if (imageSourceChange) {
+      this.imageElement.src = this.imageSource;
+    }
   }
 
   onImageLoadComplete(element: HTMLElement, event: Event): any {
